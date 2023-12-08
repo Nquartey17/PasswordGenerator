@@ -13,8 +13,58 @@ public class Main {
 
     }
 
+    public static String generatePassword() {
+        return null;
+    }
+
     public static void badPassword(String message) {
-        System.out.println(message + " Please try again");
+        System.out.println(message + " Please try again:");
+    }
+
+
+    public static int containsNumber(String password) {
+        int count = 0;
+        char[] chars = password.toCharArray();
+        for (char ch : chars) {
+            if (Character.isDigit(ch)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static int containsUppercase(String password) {
+        int count = 0;
+        char[] chars = password.toCharArray();
+        for (char ch : chars) {
+            if (Character.isUpperCase(ch)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static int containsLowercase(String password) {
+        int count = 0;
+        char[] chars = password.toCharArray();
+        for (char ch : chars) {
+            if (Character.isLowerCase(ch)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static int containsSpecialChar(String password) {
+        int count = 0;
+        char[] chars = password.toCharArray();
+        for (char ch : chars) {
+            if (!Character.isDigit(ch) && !Character.isUpperCase(ch) &&
+            !Character.isLowerCase(ch)) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public static void main(String[] args) {
@@ -27,30 +77,23 @@ public class Main {
                 "At least 1 lowercase letter\n" +
                 "At least 1 number\n" +
                 "At least 1 special character\n" +
-                "Password length but be 8 characters or more\n");
+                "Password length but be 8 characters or more\n" +
+                "Alternatively, you can enter 'generate' for the program to create a random password for you\n");
 
         System.out.println("Enter your password");
         String password = scnr.nextLine();
         boolean accepted = false;
-        int uppercase = 0, lowercase = 0, number = 0, specialChar = 0;
 
-        //Check every character in string and add to values for requirements are met
-        //Remember to reset values after each failure
-        for (int i = 0; i < password.length(); i++) {
-            char letter = password.charAt(i);
-            if (Character.isDigit(letter)) {
-                number++;
-            } else if (Character.isUpperCase(letter)) {
-                uppercase++;
-            } else if (Character.isLowerCase(letter)) {
-                lowercase++;
-            } else {
-                specialChar++;
-            }
-        }
 
         //create a method to prevent repetition
         while (!accepted) {
+            int uppercase = containsUppercase(password), lowercase = containsLowercase(password),
+                    number = containsNumber(password), specialChar = containsSpecialChar(password);
+
+            if (password.equalsIgnoreCase("generate")) {
+                System.out.println("Your randomly generated password is ");
+                accepted = true;
+            }
             if (password.length() < 8) {
                 badPassword("Password length is too short.");
                 password = scnr.nextLine();
@@ -73,8 +116,5 @@ public class Main {
         }
 
     }
-
-
-
 
 }
