@@ -25,67 +25,56 @@ public class Main {
 
     }
 
+    /* Method to reduce repetitive code
+    takes the number requirements for each character type and adds to hashSet
+     */
+    public static void addToSet(int count, HashSet<Character> set, char[] array) {
+        Random rand = new Random();
+        while (count > 0){
+            int randomNum = rand.nextInt(array.length);
+            set.add(array[randomNum]);
+            count--;
+        }
+
+    }
+
     /* Password length will always be 14 characters
     contains 3 numbers, 3 special characters, 3 uppercase letters, and 5 lowercase
     characters will be randomly scrambled, no duplicates
-    I will simplify repetitive code later
+    I've noticed sometimes the password length is < 14, Still trying to figure out why that happens
      */
     public static String generatePassword() {
         HashSet<Character> charSet = new HashSet<>();
-        Random rand = new Random();
-        char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        char[] alphabetLower = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        char[] alphabetUpper = "abcdefghijklmnopqrstuvwxyz".toUpperCase().toCharArray();
         char[] nums = "0123456789".toCharArray();
         char[] spChars = "!@#$%^&*()[]{}<>.".toCharArray();
 
         //add numbers to the set
         int numCount = 3;
-        while (numCount > 0) {
-            int randomNum = rand.nextInt(nums.length);
-            if (!charSet.contains(nums[randomNum])) {
-                charSet.add(nums[randomNum]);
-                numCount--;
-            }
-        }
+        addToSet(numCount, charSet, nums);
 
         //add lowercase letters to set
         int lowerChars = 5;
-        while (lowerChars > 0) {
-            int randomNum = rand.nextInt(26);
-            if (!charSet.contains(alphabet[randomNum])) {
-                charSet.add(alphabet[randomNum]);
-                lowerChars--;
-            }
-        }
+        addToSet(lowerChars, charSet, alphabetLower);
 
         //add uppercase letters to set
         int upperChars = 3;
-        while (upperChars > 0) {
-            int randomNum = rand.nextInt(26);
-            if (!charSet.contains(alphabet[randomNum])) {
-                charSet.add(Character.toUpperCase(alphabet[randomNum]));
-                upperChars--;
-            }
-        }
+        addToSet(upperChars, charSet, alphabetUpper);
 
         //add special characters to set
         int specialChars = 3;
-        while (specialChars > 0) {
-            int randomNum = rand.nextInt(spChars.length);
-            if (!charSet.contains(spChars[randomNum])) {
-                charSet.add(spChars[randomNum]);
-                specialChars--;
-            }
-        }
+        addToSet(specialChars, charSet, spChars);
 
-        String password = "";
+        //randomize elements in arraylist
         List<Character> passwordChars = new ArrayList<>(charSet);
         Collections.shuffle(passwordChars);
+
         StringBuilder sb = new StringBuilder();
         for (Character value : passwordChars) {
             sb.append(value.toString());
         }
-        password = sb.toString();
-        return password;
+        return sb.toString();
     }
 
     public static void badPassword(String message) {
@@ -148,7 +137,7 @@ public class Main {
                 "At least 1 lowercase letter\n" +
                 "At least 1 number\n" +
                 "At least 1 special character\n" +
-                "Password length but be 8 characters or more\n" +
+                "Password length must be 8 characters or more\n" +
                 "Alternatively, you can enter 'generate' for the program to create a random password for you\n");
 
         System.out.println("Enter your password");
