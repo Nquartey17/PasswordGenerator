@@ -70,6 +70,7 @@ public class Main {
         List<Character> passwordChars = new ArrayList<>(charSet);
         Collections.shuffle(passwordChars);
 
+        //Convert characters in arraylist to string
         StringBuilder sb = new StringBuilder();
         for (Character value : passwordChars) {
             sb.append(value.toString());
@@ -77,54 +78,35 @@ public class Main {
         return sb.toString();
     }
 
+    //I might not need this method unless I will expand on it
     public static void badPassword(String message) {
         System.out.println(message + " Please try again:");
     }
 
-
-    public static int containsNumber(String password) {
-        int count = 0;
+    //Method to prevent repetition
+    //Count nums, letters, and special characters in string
+    public static  int containsValue(String password, String type) {
+        int numCount = 0; int upperCount = 0; int lowerCount = 0; int spCount = 0;
         char[] chars = password.toCharArray();
         for (char ch : chars) {
             if (Character.isDigit(ch)) {
-                count++;
+                numCount++;
+            } else if (Character.isUpperCase(ch)) {
+                upperCount++;
+            } else if (Character.isLowerCase(ch)) {
+                lowerCount++;
+            } else {
+                spCount++;
             }
         }
-        return count;
-    }
 
-    public static int containsUppercase(String password) {
-        int count = 0;
-        char[] chars = password.toCharArray();
-        for (char ch : chars) {
-            if (Character.isUpperCase(ch)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public static int containsLowercase(String password) {
-        int count = 0;
-        char[] chars = password.toCharArray();
-        for (char ch : chars) {
-            if (Character.isLowerCase(ch)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public static int containsSpecialChar(String password) {
-        int count = 0;
-        char[] chars = password.toCharArray();
-        for (char ch : chars) {
-            if (!Character.isDigit(ch) && !Character.isUpperCase(ch) &&
-            !Character.isLowerCase(ch)) {
-                count++;
-            }
-        }
-        return count;
+        //type parameter determines which count to return to each variable in main method
+        return switch (type) {
+            case "num" -> numCount;
+            case "upper" -> upperCount;
+            case "lower" -> lowerCount;
+            default -> spCount;
+        };
     }
 
     public static void main(String[] args) {
@@ -144,11 +126,10 @@ public class Main {
         String password = scnr.nextLine();
         boolean accepted = false;
 
-
         //create a method to prevent repetition
         while (!accepted) {
-            int uppercase = containsUppercase(password), lowercase = containsLowercase(password),
-                    number = containsNumber(password), specialChar = containsSpecialChar(password);
+            int uppercase = containsValue(password, "upper"), lowercase = containsValue(password, "lower"),
+                    number = containsValue(password, "num"), specialChar = containsValue(password, "sp");
 
             if (password.equalsIgnoreCase("generate")) {
                 System.out.println("Your randomly generated password is " + generatePassword());
